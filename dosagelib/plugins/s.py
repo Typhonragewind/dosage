@@ -572,6 +572,21 @@ class StickyDillyBuns(ComicControlScraper):
     endOfLife = True
 
 
+class StillInTheSimulation(ParserScraper):
+    url = 'https://stillinthesimulation.com/'
+    stripUrl = url + 'untitled-comic/%s'
+    firstStripUrl = stripUrl % 'the-bikini-bottom-horror-chapter-1-rise-of-the-star'
+    # the HTML structure of this one is highly inconsistent
+    imageSearch = ('//div[@class="post-contents entry-content"]/a',
+                   '//div[@class="post-contents entry-content"]/p/a',
+                   '//div[@class="wp-caption alignnone"]/a',
+                   '//div[@class="wp-caption alignnone"]/img',
+                   '//div[@class="entry-content"]/a')
+    prevSearch = '//a[@class="webcomic-link webcomic1-link previous-webcomic-link previous-webcomic1-link"]'
+    help = 'Index format: UUID'
+    multipleImagesPerStrip = True
+
+
 class StreetFighter(ComicControlScraper):
     url = 'http://www.streetfightercomics.com'
 
