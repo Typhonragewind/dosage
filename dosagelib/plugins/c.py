@@ -209,6 +209,18 @@ class ChannelAte(WordPressNavi):
     url = 'http://www.channelate.com/'
 
 
+class ChaosLife(ParserScraper):
+    url = 'https://chaoslife.findchaos.com/'
+    stripUrl = url + 'comic/%s'
+    firstStripUrl = stripUrl % 'redditcomic'
+    imageSearch = '//div[@id="comic"]//img'
+    prevSearch = '//a[@class="comic-nav-base comic-nav-previous"]'
+    help = 'Index format: UUID'
+    # haven't managed to get a proper naming function due to the fact that the first page gets an empty string as the comic title is not present in the url
+    # def namer(self, image_url, page_url):
+        # return page_url.rsplit('/')[-1]
+        
+
 class ChasingTheSunset(_BasicScraper):
     url = 'http://www.fantasycomic.com/'
     stripUrl = url + 'index.php?p=%s'
