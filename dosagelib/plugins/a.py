@@ -392,7 +392,11 @@ class AwkwardZombie(ParserScraper):
     firstStripUrl = stripUrl % 'coin-battle'
     imageSearch = '//div[@id="cc-comicbody"]//img'
     prevSearch = '//a[@rel="prev"]'
-    help = 'Index format: variable :('
+    help = 'Index format: nnnn (padded)'
+
+    def namer(self, imageUrl, pageUrl):
+        number = imageUrl.rsplit('/')[-1].rsplit('comic')[1].rsplit('.')[0].zfill(4)
+        return number
 
 
 class AxeCop(WordPressScraper):
