@@ -479,25 +479,25 @@ class CutLoose(_ParserScraper):
         return '%s-%s-%s_%s' % (postDate[1], postDate[2], postDate[3], filename)
 
 
-class CyanideAndHappiness(_BasicScraper):
-    url = 'https://explosm.net/comics/'
-    stripUrl = url + '%s/'
-    firstStripUrl = stripUrl % '15'
-    imageSearch = compile(tagre("img", "src", r'(.*files.explosm.net/[^/]+/[^"]+)', before="main-comic"))
-    prevSearch = compile(tagre("a", "href", r'(/comics/\d+/)', after="nav-previous"))
-    nextSearch = compile(tagre("a", "href", r"(/comics/\d+/)", after="nav-next"))
-    help = 'Index format: n (unpadded)'
+class CyanideAndHappiness(ParserScraper):
+    starter = bounceStarter
+    url = 'https://explosm.net/'
+    stripUrl = url + '%s'
+    firstStripUrl = stripUrl % '' #there is no first button and I can't figure out the name of the first comic. This should be work though
+    imageSearch = '//div[starts-with(@class, "MainComic__ComicImage")]/spawn/img'
+    prevSearch = '//div[starts-with(@class, "ComicSelector__Container")]//a[1]'
+    nextSearch = '//div[starts-with(@class, "ComicSelector__Container")]//a[2]'
+    help = 'Index format: comic title'
 
     def shouldSkipUrl(self, url, data):
         """Skip pages without images."""
         return "/comics/play-button.png" in data[0]
 
-    def namer(self, image_url, page_url):
-        imgname = image_url.split('/')[-1]
-        # only get the first 100 chars for the image name
-        imgname = imgname[:100]
-        imgnum = page_url.split('/')[-2]
-        return '%s_%s' % (imgnum, imgname)
+    def namer(self, imageUrl, pageUrl):
+        page = self.getPage(pageUrl)
+        post_date_element = page.xpath('//div[starts-with(@class, "Author__Right")]/p[1]/text()')
+        date = post_date_element[1].replace(".","-")
+        return date + "-" + pageUrl.rsplit('/')[-1].replace("#comic","")
 
 
 class CynWolf(_ParserScraper):
