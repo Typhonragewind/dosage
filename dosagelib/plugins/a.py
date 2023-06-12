@@ -378,12 +378,20 @@ class ATaleOfTails(WordPressScraper):
 
 
 class Awaken(ParserScraper):
-    url = "https://www.awakencomic.com/"
+    starter = bounceStarter
+    url = "https://www.awakencomic.com/"   
     stripUrl = url + 'comic/%s'
     firstStripUrl = stripUrl % 'comic-cover'
     imageSearch = '//div[@id="cc-comicbody"]//img'
     prevSearch = '//a[@rel="prev"]'
-    help = 'Index format: chapter-n-page-n (unpadded)'
+    nextSearch = '//a[@rel="next"]'
+    help = 'Index format: Date-chapter-n-page-n (unpadded)'
+
+    def namer(self, imageUrl, pageUrl):
+        page = self.getPage(pageUrl)
+        post_date_element = page.xpath('//div[@class="cc-publishtime"]/text()')
+        date = datetime.strptime(post_date_element[0],'Posted %B %d, %Y at %I:%M %p').strftime('%Y-%m-%d')
+        return date + "-" + pageUrl.rsplit('/')[-1]
 
 
 class AwkwardZombie(ParserScraper):
